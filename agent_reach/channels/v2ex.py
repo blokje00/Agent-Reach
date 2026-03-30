@@ -19,7 +19,7 @@ def _get_json(url: str) -> Any:
 
 class V2EXChannel(Channel):
     name = "v2ex"
-    description = "V2EX 节点、主题与回复"
+    description = "V2EX nodes, topics and replies"
     backends = ["V2EX API (public)"]
     tier = 0
 
@@ -41,16 +41,16 @@ class V2EXChannel(Channel):
             _get_json(
                 "https://www.v2ex.com/api/topics/show.json?node_name=python&page=1"
             )
-            return "ok", "公开 API 可用（热门主题、节点浏览、主题详情、用户信息）"
+            return "ok", "Public API available (hot topics, node browsing, topic details, user info)"
         except Exception as e:
-            return "warn", f"V2EX API 连接失败（可能需要代理）：{e}"
+            return "warn", f"V2EX API connection failed (may need a proxy): {e}"
 
     # ------------------------------------------------------------------ #
     # Data-fetching methods
     # ------------------------------------------------------------------ #
 
     def get_hot_topics(self, limit: int = 20) -> list:
-        """获取热门帖子列表。
+        """Fetch list of hot topics.
 
         Returns a list of dicts with keys:
           title, url, replies, node_name, node_title, content
@@ -75,11 +75,11 @@ class V2EXChannel(Channel):
         return results
 
     def get_node_topics(self, node_name: str, limit: int = 20) -> list:
-        """获取指定节点的最新帖子。
+        """Fetch latest topics from a specified node.
 
         Args:
-            node_name: 节点名称，如 "python"、"tech"、"jobs"
-            limit:     最多返回条数
+            node_name: Node name, e.g. "python", "tech", "jobs"
+            limit:     Maximum number of results to return
 
         Returns a list of dicts with keys:
           title, url, replies, node_name, node_title, content
@@ -108,10 +108,10 @@ class V2EXChannel(Channel):
         return results
 
     def get_topic(self, topic_id: int) -> dict:
-        """获取单个帖子详情和回复列表。
+        """Fetch details and reply list for a single topic.
 
         Args:
-            topic_id: 帖子 ID（从 URL https://www.v2ex.com/t/<id> 中获取）
+            topic_id: Topic ID (extracted from URL https://www.v2ex.com/t/<id>)
 
         Returns a dict with keys:
           id, title, url, content, replies_count, node_name, node_title,
@@ -161,10 +161,10 @@ class V2EXChannel(Channel):
         }
 
     def get_user(self, username: str) -> dict:
-        """获取用户信息。
+        """Fetch user information.
 
         Args:
-            username: V2EX 用户名
+            username: V2EX username
 
         Returns a dict with keys:
           id, username, url, website, twitter, psn, github, btc,
@@ -189,24 +189,26 @@ class V2EXChannel(Channel):
         }
 
     def search(self, query: str, limit: int = 10) -> list:
-        """搜索帖子。
+        """Search topics.
 
-        注意：V2EX 公开 API 暂不支持全文搜索端点（/api/search.json 不可用）。
-        本方法通过 Jina Reader 代理 V2EX 站内搜索页面获取结果（纯文本，无结构化数据）。
+        Note: The V2EX public API does not support a full-text search endpoint
+        (/api/search.json is unavailable).
+        This method proxies the V2EX on-site search page via Jina Reader
+        and returns plain text results (no structured data).
 
-        如需精确搜索，建议直接访问 https://www.v2ex.com/?q=<query> 或
-        使用 Exa channel 的 site:v2ex.com 搜索。
+        For precise searches, visit https://www.v2ex.com/?q=<query> directly or
+        use the Exa channel with a site:v2ex.com search.
 
         Returns:
             list of dicts with keys: title, url, snippet
-            如果搜索不可用，返回包含单条 {"error": str} 的列表。
+            If search is unavailable, returns a list with a single {"error": str} entry.
         """
         return [
             {
                 "error": (
-                    "V2EX 公开 API 不提供搜索端点。"
-                    f"建议改用：https://www.v2ex.com/?q={query} "
-                    "或通过 Exa channel 使用 site:v2ex.com 搜索。"
+                    "V2EX public API does not provide a search endpoint. "
+                    f"Suggested alternative: https://www.v2ex.com/?q={query} "
+                    "or use the Exa channel with site:v2ex.com search."
                 )
             }
         ]

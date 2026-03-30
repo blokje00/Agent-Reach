@@ -5,12 +5,6 @@
 Copy this to your AI Agent:
 
 ```
-帮我更新 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/update.md
-```
-
-Or in English:
-
-```
 Update Agent Reach: https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/update.md
 ```
 
@@ -32,7 +26,7 @@ Update Agent Reach to the latest version, then verify everything still works.
 agent-reach check-update
 ```
 
-If it says "已是最新版本", you're done — tell the user.
+If it says "Already on the latest version", you're done — tell the user.
 
 ### Step 2: Update
 

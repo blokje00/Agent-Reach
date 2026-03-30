@@ -1,14 +1,14 @@
-# 常见问题排查
+# Troubleshooting Common Issues
 
-## Twitter/X: bird CLI 连接失败
+## Twitter/X: bird CLI connection failure
 
-**症状：** `bird search` 或其他命令返回错误
+**Symptom:** `bird search` or other commands return an error
 
-**原因：** bird CLI 需要 AUTH_TOKEN 和 CT0 环境变量才能访问 Twitter API。如果你的网络环境需要代理才能访问 x.com，需要配置代理。
+**Cause:** bird CLI requires AUTH_TOKEN and CT0 environment variables to access the Twitter API. If your network environment needs a proxy to reach x.com, you need to configure one.
 
-**解决方案：**
+**Solutions:**
 
-### 方案 1：设置环境变量代理
+### Option 1: Set proxy environment variables
 
 ```bash
 export HTTP_PROXY="http://user:pass@host:port"
@@ -16,28 +16,28 @@ export HTTPS_PROXY="http://user:pass@host:port"
 bird search "test" -n 1
 ```
 
-### 方案 2：使用全局代理工具
+### Option 2: Use a system-wide proxy tool
 
-让代理工具接管所有网络流量，这样 bird 的请求也会走代理：
+Let a proxy tool handle all network traffic so bird requests go through it too:
 
 ```bash
-# macOS — ClashX / Surge 开启"增强模式"
-# Linux — proxychains 或 tun2socks
+# macOS — ClashX / Surge with "Enhanced Mode" enabled
+# Linux — proxychains or tun2socks
 proxychains bird search "test" -n 1
 ```
 
-### 方案 3：不用 bird，用 Exa 搜索替代
+### Option 3: Use Exa search as a fallback instead of bird
 
-bird 不可用时，可以直接用 Exa 搜索 Twitter 内容：
+When bird is unavailable, use Exa to search Twitter content directly:
 
 ```bash
-mcporter call 'exa.web_search_exa(query: "site:x.com 搜索词", numResults: 5)'
+mcporter call 'exa.web_search_exa(query: "site:x.com search_term", numResults: 5)'
 ```
 
-### 方案 4：检查认证
+### Option 4: Check authentication
 
 ```bash
 bird check
 ```
 
-> 如果返回 "Missing credentials"，需要设置 AUTH_TOKEN 和 CT0 环境变量。
+> If it returns "Missing credentials", you need to set the AUTH_TOKEN and CT0 environment variables.

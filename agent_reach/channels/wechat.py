@@ -12,8 +12,8 @@ from .base import Channel
 
 class WeChatChannel(Channel):
     name = "wechat"
-    description = "微信公众号文章"
-    backends = ["wechat-article-for-ai (Camoufox)", "miku_ai (搜狗搜索)"]
+    description = "WeChat Official Account articles"
+    backends = ["wechat-article-for-ai (Camoufox)", "miku_ai (Sogou Search)"]
     tier = 2
 
     def can_handle(self, url: str) -> bool:
@@ -38,20 +38,20 @@ class WeChatChannel(Channel):
             pass
 
         if has_read and has_search:
-            return "ok", "完整可用（搜索 + 阅读公众号文章）"
+            return "ok", "Fully available (search + read official account articles)"
         elif has_read:
-            return "ok", "可阅读公众号文章（URL → Markdown）。安装 miku_ai 可解锁搜索：pip install miku_ai"
+            return "ok", "Can read official account articles (URL → Markdown). Install miku_ai to unlock search: pip install miku_ai"
         elif has_search:
             return "warn", (
-                "可搜索公众号文章但无法阅读全文。安装阅读工具：\n"
+                "Can search official account articles but cannot read full text. Install reading tool:\n"
                 "  pip install camoufox[geoip] markdownify beautifulsoup4 httpx mcp"
             )
         else:
             return "off", (
-                "需要安装微信公众号工具：\n"
-                "  # 阅读（URL → Markdown）：\n"
+                "WeChat Official Account tools need to be installed:\n"
+                "  # Reading (URL → Markdown):\n"
                 "  pip install camoufox[geoip] markdownify beautifulsoup4 httpx mcp\n"
-                "  # 搜索（关键词 → 文章列表）：\n"
+                "  # Search (keyword → article list):\n"
                 "  pip install miku_ai\n"
-                "  详见 https://github.com/bzd6661/wechat-article-for-ai"
+                "  See https://github.com/bzd6661/wechat-article-for-ai"
             )

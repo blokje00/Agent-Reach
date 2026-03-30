@@ -162,7 +162,7 @@ def _docker_run_hint() -> str:
 
 class XiaoHongShuChannel(Channel):
     name = "xiaohongshu"
-    description = "小红书笔记"
+    description = "XiaoHongShu (Little Red Book) notes"
     backends = ["xiaohongshu-mcp"]
     tier = 2
 
@@ -175,11 +175,11 @@ class XiaoHongShuChannel(Channel):
         mcporter = shutil.which("mcporter")
         if not mcporter:
             return "off", (
-                "需要 mcporter + xiaohongshu-mcp。安装步骤：\n"
+                "Requires mcporter + xiaohongshu-mcp. Installation steps:\n"
                 "  1. npm install -g mcporter\n"
                 "  2. " + _docker_run_hint().strip() + "\n"
                 "  3. mcporter config add xiaohongshu http://localhost:18060/mcp\n"
-                "  详见 https://github.com/xpzouying/xiaohongshu-mcp"
+                "  See https://github.com/xpzouying/xiaohongshu-mcp"
             )
         is_windows = platform.system() == "Windows"
         config_timeout = 15 if is_windows else 5
@@ -193,12 +193,12 @@ class XiaoHongShuChannel(Channel):
             )
             if r.returncode != 0 or "xiaohongshu" not in r.stdout.lower():
                 return "off", (
-                    "mcporter 已装但小红书 MCP 未配置。运行：\n"
+                    "mcporter is installed but XiaoHongShu MCP is not configured. Run:\n"
                     + _docker_run_hint() + "\n"
                     "  mcporter config add xiaohongshu http://localhost:18060/mcp"
                 )
         except Exception:
-            return "off", "mcporter 连接异常"
+            return "off", "mcporter connection error"
 
         # Use longer timeouts on Windows where mcporter may be slower to respond.
         list_timeout = 30 if is_windows else 10
@@ -211,9 +211,9 @@ class XiaoHongShuChannel(Channel):
                 timeout=list_timeout,
             )
             if r.returncode == 0 and _mcporter_status_ok(r.stdout):
-                return "ok", "MCP 已连接（阅读、搜索、发帖、评论、点赞）"
-            return "warn", "MCP 已配置，但连接异常；请检查 xiaohongshu-mcp 服务状态"
+                return "ok", "MCP connected (read, search, post, comment, like)"
+            return "warn", "MCP is configured but connection failed; check xiaohongshu-mcp service status"
         except subprocess.TimeoutExpired:
-            return "warn", "MCP 已配置，但健康检查超时；请检查 xiaohongshu-mcp 服务状态"
+            return "warn", "MCP is configured but health check timed out; check xiaohongshu-mcp service status"
         except Exception:
-            return "warn", "MCP 已配置，但连接异常；请检查 xiaohongshu-mcp 服务状态"
+            return "warn", "MCP is configured but connection failed; check xiaohongshu-mcp service status"

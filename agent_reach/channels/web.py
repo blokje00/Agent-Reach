@@ -6,7 +6,7 @@ from .base import Channel
 
 class WebChannel(Channel):
     name = "web"
-    description = "任意网页"
+    description = "Any web page"
     backends = ["Jina Reader"]
     tier = 0
 
@@ -14,4 +14,4 @@ class WebChannel(Channel):
         return True  # Fallback — handles any URL
 
     def check(self, config=None):
-        return "ok", "通过 Jina Reader 读取任意网页（curl https://r.jina.ai/URL）"
+        return "ok", "Read any web page via Jina Reader (curl https://r.jina.ai/URL)"

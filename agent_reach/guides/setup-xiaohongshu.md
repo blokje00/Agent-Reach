@@ -1,20 +1,20 @@
-# 小红书配置指南
+# XiaoHongShu (Little Red Book) Setup Guide
 
-## 功能说明
-读取和搜索小红书笔记。通过 [xiaohongshu-mcp](https://github.com/xpzouying/xiaohongshu-mcp) 实现（⭐9K+，Go 语言，内置 Chrome 浏览器）。
+## Feature Overview
+Read and search XiaoHongShu notes. Powered by [xiaohongshu-mcp](https://github.com/xpzouying/xiaohongshu-mcp) (⭐9K+, Go, built-in Chrome browser).
 
-## 前置条件
-- Docker（用来运行 xiaohongshu-mcp 服务）
-- mcporter CLI（MCP 协议桥接工具）
+## Prerequisites
+- Docker (to run the xiaohongshu-mcp service)
+- mcporter CLI (MCP protocol bridge tool)
 
-## Agent 可自动完成的步骤
+## Steps the Agent Can Complete Automatically
 
-### 1. 安装 mcporter
+### 1. Install mcporter
 ```bash
 npm install -g mcporter
 ```
 
-### 2. 启动 xiaohongshu-mcp 服务
+### 2. Start the xiaohongshu-mcp service
 ```bash
 docker run -d \
   --name xiaohongshu-mcp \
@@ -22,7 +22,7 @@ docker run -d \
   xpzouying/xiaohongshu-mcp
 ```
 
-> 如需代理（服务器部署推荐）：
+> If a proxy is needed (recommended for server deployments):
 > ```bash
 > docker run -d \
 >   --name xiaohongshu-mcp \
@@ -31,31 +31,31 @@ docker run -d \
 >   xpzouying/xiaohongshu-mcp
 > ```
 
-### 3. 注册到 mcporter
+### 3. Register with mcporter
 ```bash
 mcporter config add xiaohongshu http://localhost:18060/mcp
 ```
 
-### 4. 验证
+### 4. Verify
 ```bash
 agent-reach doctor
 ```
 
-应该看到小红书显示为 ✅ 或 ⚠️（MCP 已连接但未登录）。
+You should see XiaoHongShu showing ✅ or ⚠️ (MCP connected but not logged in).
 
-## 需要用户手动做的步骤
+## Steps Requiring Manual User Action
 
-如果 doctor 显示"MCP 已连接但未登录"：
+If doctor shows "MCP connected but not logged in":
 
-> 小红书需要登录一次（之后会记住你的登录状态）。
+> XiaoHongShu requires a one-time login (the session is remembered afterwards).
 >
-> 打开 http://localhost:18060 ，用手机小红书 App 扫描二维码登录。
-> 登录后 cookie 会自动保存在 Docker 容器内，大约 1-3 个月有效。
+> Open http://localhost:18060 and scan the QR code with the XiaoHongShu mobile app to log in.
+> After login, cookies are automatically saved inside the Docker container and remain valid for about 1–3 months.
 
-## 常见问题
+## FAQ
 
-**Q: Docker 容器重启后 cookie 丢了？**
-A: 挂载数据卷持久化：
+**Q: Cookies lost after Docker container restart?**
+A: Mount a data volume for persistence:
 ```bash
 docker run -d \
   --name xiaohongshu-mcp \
@@ -64,13 +64,13 @@ docker run -d \
   xpzouying/xiaohongshu-mcp
 ```
 
-**Q: 服务器上小红书提示 IP 风险？**
-A: 加代理参数 `-e XHS_PROXY=http://user:pass@ip:port`，推荐住宅代理。
+**Q: XiaoHongShu shows IP risk on a server?**
+A: Add the proxy parameter `-e XHS_PROXY=http://user:pass@ip:port`. Residential proxies are recommended.
 
-**Q: Docker 镜像不支持 ARM64 / Apple Silicon？**
-A: 上游镜像暂无 ARM64 版本，两种解决办法：
+**Q: Docker image doesn't support ARM64 / Apple Silicon?**
+A: The upstream image does not yet have an ARM64 build. Two options:
 
-方法一：使用 Rosetta 模拟运行（推荐，最简单）
+Option 1: Use Rosetta emulation (recommended, simplest)
 ```bash
 docker run -d \
   --name xiaohongshu-mcp \
@@ -79,7 +79,7 @@ docker run -d \
   xpzouying/xiaohongshu-mcp
 ```
 
-方法二：从源码编译原生 ARM64 版本
+Option 2: Build a native ARM64 image from source
 ```bash
 git clone https://github.com/xpzouying/xiaohongshu-mcp
 cd xiaohongshu-mcp
@@ -87,5 +87,5 @@ docker build -t xiaohongshu-mcp .
 docker run -d --name xiaohongshu-mcp -p 18060:18060 xiaohongshu-mcp
 ```
 
-**Q: 我不想用 Docker？**
-A: 可以从源码编译：https://github.com/xpzouying/xiaohongshu-mcp
+**Q: I don't want to use Docker?**
+A: You can compile from source: https://github.com/xpzouying/xiaohongshu-mcp

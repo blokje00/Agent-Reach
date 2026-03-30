@@ -94,8 +94,9 @@ class TestDoctor:
         import re
         plain = re.sub(r"\[[^\]]*\]", "", report)
         assert "Agent Reach" in plain
-        assert "装好即用：" in plain
-        assert "搜索（mcporter 即可解锁）：" in plain
-        assert "配置后可用：" in plain
-        assert "1/3 个渠道可用" in plain
+        assert "Ready out of the box:" in plain
+        assert "Search (unlockable with mcporter):" in plain
+        assert "Available after setup:" in plain
+        assert "1/3" in plain
+        assert "channels available" in plain
         assert "agent-reach setup" in plain

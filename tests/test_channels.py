@@ -60,7 +60,7 @@ class TestV2EXChannel:
         )
         status, msg = V2EXChannel().check()
         assert status == "ok"
-        assert "公开 API 可用" in msg
+        assert "Public API available" in msg
 
     def test_check_warn_when_api_unreachable(self, monkeypatch):
         import urllib.request
@@ -71,7 +71,7 @@ class TestV2EXChannel:
         monkeypatch.setattr(urllib.request, "urlopen", raise_error)
         status, msg = V2EXChannel().check()
         assert status == "warn"
-        assert "失败" in msg
+        assert "failed" in msg.lower()
 
     # ------------------------------------------------------------------ #
     # get_hot_topics
@@ -363,7 +363,7 @@ class TestXueqiuChannel:
         monkeypatch.setattr(xueqiu_mod._opener, "open", lambda req, timeout=None: FakeResponse())
         status, msg = XueqiuChannel().check()
         assert status == "ok"
-        assert "公开 API 可用" in msg
+        assert "Public API available" in msg
 
     def test_check_warn_when_api_unreachable(self, monkeypatch):
         import agent_reach.channels.xueqiu as xueqiu_mod
@@ -376,7 +376,7 @@ class TestXueqiuChannel:
         monkeypatch.setattr(xueqiu_mod._opener, "open", raise_error)
         status, msg = XueqiuChannel().check()
         assert status == "warn"
-        assert "失败" in msg
+        assert "failed" in msg.lower()
 
     # ------------------------------------------------------------------ #
     # get_stock_quote
@@ -610,5 +610,5 @@ class TestXiaoHongShuChannel:
 
         assert XiaoHongShuChannel().check() == (
             "ok",
-            "MCP 已连接（阅读、搜索、发帖、评论、点赞）",
+            "MCP connected (read, search, post, comment, like)",
         )
