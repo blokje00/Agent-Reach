@@ -1,81 +1,70 @@
-# Twitter 高级功能配置指南（bird CLI）
+# Twitter Advanced Features Setup Guide (bird CLI)
 
-Twitter 基础阅读通过 Jina Reader 免费可用，无需配置。
+Twitter basic reading is available for free via Jina Reader, no setup required.
 
-高级功能需要 bird CLI（@steipete/bird）：
+Advanced features require bird CLI (@steipete/bird):
 
-- 搜索推文（`bird search`）
-- 读取完整推文和对话链（`bird read`、`bird thread`）
-- 用户时间线（`bird user-tweets`）
+- Search tweets (`bird search`)
+- Read full tweets and conversation threads (`bird read`, `bird thread`)
+- User timelines (`bird user-tweets`)
 
-bird 是免费开源工具（npm 包 @steipete/bird），但需要你的 Twitter 账号 cookie。
+bird is a free open-source tool (npm package @steipete/bird), but requires your Twitter account cookie.
 
-## 快速配置
+## Quick Setup
 
-1. 检查 bird 是否安装：
-
+1. Check if bird is installed:
 ```bash
-which bird && echo "installed" || echo "not installed"
+bird check
 ```
 
-2. 安装 bird：
-
+2. Install bird:
 ```bash
 npm install -g @steipete/bird
 ```
 
-> 备选包：`npm install -g @connormartin/bird`
+> Alternative package: `npm install -g @connormartin/bird`
 
-3. 测试是否配置好：
-
+3. Test if configured:
 ```bash
-AUTH_TOKEN="xxx" CT0="yyy" bird search "test" -n 1
+bird check
 ```
 
-## 获取 Cookie（Cookie-Editor 方式，推荐）
+## Get Cookie (Cookie-Editor method, recommended)
 
-1. 安装 [Cookie-Editor](https://cookie-editor.com/) 浏览器扩展
-2. 登录 x.com
-3. 点击 Cookie-Editor 图标 → Export → 复制全部
-4. 运行配置命令：
-
+1. Install the [Cookie-Editor](https://cookie-editor.com/) browser extension
+2. Log in to x.com
+3. Click the Cookie-Editor icon → Export → Copy all
+4. Run the configuration command:
 ```bash
-agent-reach configure twitter-cookies "粘贴的 cookie JSON"
+agent-reach configure twitter-cookies "paste the cookie JSON here"
 ```
 
-这会自动提取 `auth_token` 和 `ct0`，并写入环境变量。
+This automatically extracts `auth_token` and `ct0` and writes them as environment variables.
 
-## 手动设置 Cookie
+## Manual Cookie Setup
 
-如果你已经知道 `auth_token` 和 `ct0`：
+If you already know your `auth_token` and `ct0`:
 
-1. 安装 bird（如果没装）：`npm install -g @steipete/bird`
+1. Install bird (if not already installed): `npm install -g @steipete/bird`
 
-2. 设置环境变量：
-
+2. Set environment variables:
 ```bash
-export AUTH_TOKEN="你的auth_token"
-export CT0="你的ct0"
+export AUTH_TOKEN="your_auth_token"
+export CT0="your_ct0"
 ```
 
-3. 测试：
-
+3. Test:
 ```bash
-bird search "test" -n 1
+bird check
+bird search "test query"
 ```
 
-## 代理配置
+## Proxy Configuration
 
-> bird CLI 支持通过环境变量设置代理：
-
+> bird CLI supports proxies via environment variables:
 ```bash
-export HTTP_PROXY="http://user:pass@host:port"
-export HTTPS_PROXY="http://user:pass@host:port"
-bird search "test" -n 1
+export HTTP_PROXY="http://user:pass@ip:port"
+export HTTPS_PROXY="http://user:pass@ip:port"
 ```
 
-也可以使用全局代理工具：
-
-```bash
-proxychains bird search "test" -n 1
-```
+You can also use a system-wide proxy tool.

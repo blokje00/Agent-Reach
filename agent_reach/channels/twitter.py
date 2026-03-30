@@ -8,7 +8,7 @@ from .base import Channel
 
 class TwitterChannel(Channel):
     name = "twitter"
-    description = "Twitter/X 推文"
+    description = "Twitter/X tweets"
     backends = ["bird CLI"]
     tier = 1
 
@@ -21,7 +21,7 @@ class TwitterChannel(Channel):
         bird = shutil.which("bird") or shutil.which("birdx")
         if not bird:
             return "warn", (
-                "bird CLI 未安装。搜索可通过 Exa 替代。安装：\n"
+                "bird CLI is not installed. Search is available via Exa as fallback. Install:\n"
                 "  npm install -g @steipete/bird"
             )
 
@@ -32,19 +32,19 @@ class TwitterChannel(Channel):
             )
             output = (r.stdout or "") + (r.stderr or "")
             if r.returncode == 0:
-                return "ok", "完整可用（读取、搜索推文，含长文/X Article）"
+                return "ok", "Fully available (read and search tweets, including long posts/X Articles)"
             # bird check returns 1 when auth is missing
             if "Missing credentials" in output or "missing" in output.lower():
                 return "warn", (
-                    "bird CLI 已安装但未配置认证。设置环境变量：\n"
+                    "bird CLI is installed but authentication is not configured. Set environment variables:\n"
                     "  export AUTH_TOKEN=\"xxx\"\n"
                     "  export CT0=\"yyy\"\n"
-                    "或运行：\n"
+                    "or run:\n"
                     "  agent-reach configure twitter-cookies \"auth_token=xxx; ct0=yyy\""
                 )
             return "warn", (
-                "bird CLI 已安装但认证检查失败。运行：\n"
+                "bird CLI is installed but authentication check failed. Run:\n"
                 "  agent-reach configure twitter-cookies \"auth_token=xxx; ct0=yyy\""
             )
         except Exception:
-            return "warn", "bird CLI 已安装但连接失败"
+            return "warn", "bird CLI is installed but connection failed"

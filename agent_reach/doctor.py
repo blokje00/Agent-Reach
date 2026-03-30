@@ -32,7 +32,7 @@ def format_report(results: Dict[str, dict]) -> str:
         escape = lambda x: x
 
     lines = []
-    lines.append("[bold cyan]Agent Reach 状态[/bold cyan]")
+    lines.append("[bold cyan]Agent Reach Status[/bold cyan]")
     lines.append("[cyan]" + "=" * 40 + "[/cyan]")
 
     ok_count = sum(1 for r in results.values() if r["status"] == "ok")
@@ -40,7 +40,7 @@ def format_report(results: Dict[str, dict]) -> str:
 
     # Tier 0 — zero config
     lines.append("")
-    lines.append("[bold]✅ 装好即用：[/bold]")
+    lines.append("[bold]✅ Ready out of the box:[/bold]")
     for key, r in results.items():
         if r["tier"] == 0:
             name_msg = f"[bold]{escape(r['name'])}[/bold] — {escape(r['message'])}"
@@ -55,7 +55,7 @@ def format_report(results: Dict[str, dict]) -> str:
     tier1 = {k: r for k, r in results.items() if r["tier"] == 1}
     if tier1:
         lines.append("")
-        lines.append("[bold]搜索（mcporter 即可解锁）：[/bold]")
+        lines.append("[bold]Search (unlockable with mcporter):[/bold]")
         for key, r in tier1.items():
             name_msg = f"[bold]{escape(r['name'])}[/bold] — {escape(r['message'])}"
             if r["status"] == "ok":
@@ -67,7 +67,7 @@ def format_report(results: Dict[str, dict]) -> str:
     tier2 = {k: r for k, r in results.items() if r["tier"] == 2}
     if tier2:
         lines.append("")
-        lines.append("[bold]配置后可用：[/bold]")
+        lines.append("[bold]Available after setup:[/bold]")
         for key, r in tier2.items():
             name_msg = f"[bold]{escape(r['name'])}[/bold] — {escape(r['message'])}"
             if r["status"] == "ok":
@@ -79,9 +79,9 @@ def format_report(results: Dict[str, dict]) -> str:
 
     lines.append("")
     status_color = "green" if ok_count == total else ("yellow" if ok_count > 0 else "red")
-    lines.append(f"状态：[{status_color}]{ok_count}/{total}[/{status_color}] 个渠道可用")
+    lines.append(f"Status: [{status_color}]{ok_count}/{total}[/{status_color}] channels available")
     if ok_count < total:
-        lines.append("运行 [cyan]`agent-reach setup`[/cyan] 解锁更多渠道")
+        lines.append("Run [cyan]`agent-reach setup`[/cyan] to unlock more channels")
 
     # Security check: config file permissions (Unix only)
     import os
@@ -95,9 +95,9 @@ def format_report(results: Dict[str, dict]) -> str:
             if mode & (stat.S_IRGRP | stat.S_IROTH):
                 lines.append("")
                 lines.append(
-                    "[bold red][!]  安全提示：config.yaml 权限过宽（其他用户可读）[/bold red]"
+                    "[bold red][!]  Security warning: config.yaml permissions are too broad (readable by other users)[/bold red]"
                 )
-                lines.append("   修复：chmod 600 ~/.agent-reach/config.yaml")
+                lines.append("   Fix: chmod 600 ~/.agent-reach/config.yaml")
         except OSError:
             pass
 

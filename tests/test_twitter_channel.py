@@ -22,7 +22,7 @@ def test_check_bird_found_and_auth_ok():
     ):
         status, message = channel.check()
     assert status == "ok"
-    assert "完整可用" in message
+    assert "Fully available" in message
 
 
 def test_check_bird_found_auth_missing():
@@ -34,7 +34,7 @@ def test_check_bird_found_auth_missing():
     ):
         status, message = channel.check()
     assert status == "warn"
-    assert "未配置认证" in message
+    assert "authentication is not configured" in message
 
 
 def test_check_bird_not_found():
@@ -55,7 +55,7 @@ def test_check_birdx_binary_accepted():
     ):
         status, message = channel.check()
     assert status == "ok"
-    assert "完整可用" in message
+    assert "Fully available" in message
 
 
 def test_check_bird_auth_failure_generic():
@@ -67,4 +67,4 @@ def test_check_bird_auth_failure_generic():
     ):
         status, message = channel.check()
     assert status == "warn"
-    assert "认证检查失败" in message
+    assert "authentication check failed" in message

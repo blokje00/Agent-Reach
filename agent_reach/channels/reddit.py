@@ -10,7 +10,7 @@ _TIMEOUT = 10
 
 
 def _reddit_reachable() -> bool:
-    """Return True if Reddit JSON API responds with 200 (带 User-Agent)."""
+    """Return True if Reddit JSON API responds with 200 (with User-Agent)."""
     url = "https://www.reddit.com/r/linux.json?limit=1"
     req = urllib.request.Request(url, headers={"User-Agent": _UA})
     try:
@@ -22,7 +22,7 @@ def _reddit_reachable() -> bool:
 
 class RedditChannel(Channel):
     name = "reddit"
-    description = "Reddit 帖子和评论"
+    description = "Reddit posts and comments"
     backends = ["JSON API", "Exa"]
     tier = 1
 
@@ -34,11 +34,11 @@ class RedditChannel(Channel):
     def check(self, config=None):
         proxy = (config.get("reddit_proxy") if config else None) or os.environ.get("REDDIT_PROXY")
         if proxy:
-            return "ok", "代理已配置，可读取帖子。搜索走 Exa"
-        # 实际探测连通性（带 User-Agent，符合 Reddit API 要求）
+            return "ok", "Proxy configured, can read posts. Search goes via Exa"
+        # Probe actual connectivity (with User-Agent, as required by Reddit API)
         if _reddit_reachable():
-            return "ok", "直连可用（JSON API 响应正常）。搜索走 Exa"
+            return "ok", "Direct connection available (JSON API responding). Search goes via Exa"
         return "warn", (
-            "无代理且 Reddit JSON API 无响应。服务器 IP 可能被封锁。配置代理：\n"
+            "No proxy and Reddit JSON API is not responding. Server IP may be blocked. Configure proxy:\n"
             "  agent-reach configure proxy http://user:pass@ip:port"
         )

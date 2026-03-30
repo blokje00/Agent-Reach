@@ -39,8 +39,8 @@ def _bilisearch_ok() -> bool:
 
 class BilibiliChannel(Channel):
     name = "bilibili"
-    description = "B站视频和字幕"
-    backends = ["yt-dlp", "B站搜索 API"]
+    description = "Bilibili videos and subtitles"
+    backends = ["yt-dlp", "Bilibili Search API"]
     tier = 1
 
     def can_handle(self, url: str) -> bool:
@@ -50,31 +50,31 @@ class BilibiliChannel(Channel):
 
     def check(self, config=None):
         if not shutil.which("yt-dlp"):
-            return "off", "yt-dlp 未安装。安装：pip install yt-dlp"
+            return "off", "yt-dlp is not installed. Install: pip install yt-dlp"
 
         proxy = (config.get("bilibili_proxy") if config else None) or os.environ.get("BILIBILI_PROXY")
 
-        # 检测搜索 API 连通性
+        # Probe search API connectivity
         api_ok = _search_api_ok()
-        # 检测 yt-dlp bilisearch 是否 412
+        # Probe yt-dlp bilisearch for 412 errors
         ytdlp_search_ok = _bilisearch_ok()
 
         parts = []
 
-        # 视频读取状态
+        # Video read status
         if proxy:
-            parts.append("视频读取：yt-dlp（代理已配置）")
+            parts.append("Video reading: yt-dlp (proxy configured)")
         else:
-            parts.append("视频读取：yt-dlp（本地环境，服务器可能需要代理）")
+            parts.append("Video reading: yt-dlp (local env; server may need proxy)")
 
-        # 搜索状态
+        # Search status
         if api_ok:
-            parts.append("搜索：B站 API 可用（/x/web-interface/search/all/v2）")
+            parts.append("Search: Bilibili API available (/x/web-interface/search/all/v2)")
         else:
-            parts.append("搜索：B站 API 不可达，搜索功能可能受限")
+            parts.append("Search: Bilibili API unreachable, search may be limited")
 
         if not ytdlp_search_ok:
-            parts.append("提示：yt-dlp bilisearch 不可用（可能 HTTP 412 反爬），搜索将走 B站 API")
+            parts.append("Note: yt-dlp bilisearch unavailable (possible HTTP 412 anti-crawl), search will use Bilibili API")
 
         status = "ok" if api_ok else "warn"
-        return status, "。".join(parts)
+        return status, ". ".join(parts)
